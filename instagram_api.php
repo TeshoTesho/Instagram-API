@@ -34,7 +34,7 @@
 						"verify_peer_name"=>false,
 					),
 				);  
-  	$url = "https://www.instagram.com/$user/channel/?__a=1"; // Default page
+  	$url = "https://www.instagram.com/$user/channel/?__a=1&page=3  "; // Default page
   	$cnt = json_decode(file_get_contents($url, false, stream_context_create($arrContextOptions)));
   	return $cnt;
   }
@@ -48,69 +48,76 @@
 
   // Search for a single post
   function get_single_post_profile($cnt,$post_number){
-  	($post_number>0? $post_number--: $post_number=0);
-  	$url_image_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->display_url;
-  	$descricao_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_media_to_caption->edges[0]->node->text;
-  	$post = array(
-  		"id"=>$post_number,
-  		"description" => $descricao_post,
-  		"image" =>  array()
-  		
-  	);
-  	if (isset($cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_sidecar_to_children->edges)){
-  		$count_post_images =count($cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_sidecar_to_children->edges);
-  		for ($a=0; $a < $count_post_images; $a++) { 
-  			$url_image_post_more= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_sidecar_to_children->edges[$a]->node->display_url;
-  			$number = array(
-  				'id' => $a,
-  				'url' => $url_image_post );
-  			array_push($post["image"],$number);
-  		}
-  	}else{
-  		$first = array(
-  			'id' => 0,
-  			'url' => $url_image_post );
-  		array_push($post["image"],$first);
-  	}
-  	return $post;
+  	($post_number>0? $post_number--: $post_number=0); //Filtro
+
+    if($post_number<11){
+     $url_image_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->display_url;
+     $descricao_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_media_to_caption->edges[0]->node->text;
+     $likes_count= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_liked_by->count;
+     $post = array(
+      "id"=>$post_number,
+      "description" => $descricao_post,
+      "likes" => $likes_count,
+      "image" =>  array()
+
+    );
+     if (isset($cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_sidecar_to_children->edges)){
+      $count_post_images =count($cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_sidecar_to_children->edges);
+      for ($a=0; $a < $count_post_images; $a++) { 
+       $url_image_post_more= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_sidecar_to_children->edges[$a]->node->display_url;
+       $number = array(
+        'id' => $a,
+        'url' => $url_image_post );
+       array_push($post["image"],$number);
+     }
+   }else{
+    $first = array(
+     'id' => 0,
+     'url' => $url_image_post );
+    array_push($post["image"],$first);
   }
+  return $post;
+}else{
+
+}
+}
 
 
   // LIMIT 12 posts -- Limitation of access to instagram, sorry
-  function get_all_post_profile($cnt){
-  	$post = array();
-  	$qtd_images = count($cnt->graphql->user->edge_owner_to_timeline_media->edges);
-  	for ($i=0; $i < $qtd_images; $i++) { 
-  		$url_image_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->display_url;
-  		$descricao_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_media_to_caption->edges[0]->node->text;
-  		$post_mature = array(
-  			"id"=>$i,
-  			"description" => $descricao_post,
-  			"image" =>  array()
-  		);
-  		array_push($post, $post_mature);
-  		if (isset($cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_sidecar_to_children->edges)){
+function get_all_post_profile($cnt){
+ $post = array();
+ $qtd_images = count($cnt->graphql->user->edge_owner_to_timeline_media->edges);
+ for ($i=0; $i < $qtd_images; $i++) { 
+  $url_image_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->display_url;
+  $descricao_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_media_to_caption->edges[0]->node->text;
+  $post_mature = array(
+   "id"=>$i,
+   "description" => $descricao_post,
+   "image" =>  array()
+ );
+  array_push($post, $post_mature);
+  if (isset($cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_sidecar_to_children->edges)){
 
-  			$count_post_images =count($cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_sidecar_to_children->edges);
-  			if($count_post_images>1){
-  				for ($a=1; $a < $count_post_images; $a++) { 
-  					$url_image_post_more= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_sidecar_to_children->edges[$a]->node->display_url;
+   $count_post_images =count($cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_sidecar_to_children->edges);
+   if($count_post_images>1){
+    for ($a=0; $a < $count_post_images; $a++) { 
+     $url_image_post_more= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_sidecar_to_children->edges[$a]->node->display_url;
 
-  					$number = array(
-  						'id' => $a,
-  						'url' => $url_image_post );
-  					array_push($post[$i]["image"],$number);
-  				}
-  			}
-  		}else{
-  			$first = array(
-  				'id' => 0,
-  				'url' => $url_image_post );
-  			array_push($post[$i]["image"],$first);
-  		}
-  	}
-  	return $post;
-  }
+     $number = array(
+      'id' => $a,
+      'url' => $url_image_post_more );
+     array_push($post[$i]["image"],$number);
+   }
+ }
+}else{
+ $first = array(
+  'id' => 0,
+  'url' => $url_image_post );
+ array_push($post[$i]["image"],$first);
+}
+}
+return $post;
+}
 
 
   // End Class
