@@ -1,37 +1,74 @@
-## Welcome to GitHub Pages
+# Instagram API
 
-You can use the [editor on GitHub](https://github.com/TeshoTesho/Instagram-API/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+> Português
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+API Desenvolvida Por: [Nicolas L. Araujo](http://nicolasleitearaujo.online)
 
-### Markdown
+## Instalação
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Basta adicionar a api dentro do arquivo e declarar a classe
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```php
+require "instagram_api.php";
+$insta = new InstagramApi;
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+## Modo de Usar
 
-### Jekyll Themes
+Você precisa definir um usuário do instagram
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/TeshoTesho/Instagram-API/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+> Como exemplo, utilizado a conta @neymarjr
 
-### Support or Contact
+```php
+$user = $insta->instagram("neymarjr"); 
+```
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Então você pode abusar da api enquanto funciona. 
+
+```php
+$post = $insta->get_single_post_profile($user,2); // Second Post
+$image_url = $post["image"][0]["url"]; // Collect image in var
+echo "<img src='$image_url'>"; // Publish in html img
+```
+
+
+---
+
+> English
+
+API Developed By: [Nicolas L. Araujo](http://nicolasleitearaujo.online)
+
+## Installation
+
+Just add the api inside the file and declare the class
+
+```php
+require "instagram_api.php";
+$insta = new InstagramApi;
+```
+## How to use
+
+You need to define an instagram user
+
+> As an example, using the @neymarjr account
+
+```php
+$user = $insta->instagram("neymarjr"); 
+```
+
+Then you can abuse the api while it works.
+
+```php
+$post = $insta->get_single_post_profile($user,2); // Second Post
+$image_url = $post["image"][0]["url"]; // Collect image in var
+echo "<img src='$image_url'>"; // Publish in html img
+```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
