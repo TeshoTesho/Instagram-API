@@ -1,40 +1,5 @@
 # Instagram API
 
-> Português
-
-API Desenvolvida Por: [Nicolas L. Araujo](http://nicolasleitearaujo.online)
-
-## Instalação
-
-Basta adicionar a api dentro do arquivo e declarar a classe
-
-
-```php
-require "instagram_api.php";
-$insta = new InstagramApi;
-```
-
-## Modo de Usar
-
-Você precisa definir um usuário do instagram
-
-> Como exemplo, utilizado a conta @neymarjr
-
-```php
-$user = $insta->instagram("neymarjr"); 
-```
-
-Então você pode abusar da api enquanto funciona. 
-
-```php
-$post = $insta->get_single_post_profile($user,2); // Second Post
-$image_url = $post["image"][0]["url"]; // Collect image in var
-echo "<img src='$image_url'>"; // Publish in html img
-```
-
-
----
-
 > English
 
 API Developed By: [Nicolas L. Araujo](http://nicolasleitearaujo.online)
