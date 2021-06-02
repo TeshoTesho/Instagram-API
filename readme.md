@@ -1,5 +1,8 @@
 # Instagram API
 
+Obs: Deixou de funcionar em: 04/02/2021.
+
+
 > Português
 
 API Desenvolvida Por: [Nicolas L. Araujo](http://nicolasleitearaujo.online)
