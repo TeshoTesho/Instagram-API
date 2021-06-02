@@ -1,6 +1,6 @@
 # Instagram API
 
-Obs: Deixou de funcionar em: 04/02/2021.
+Obs: Deixou de funcionar em: 04/05/2021.
 
 
 > Português
