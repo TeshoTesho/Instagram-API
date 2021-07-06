@@ -54,6 +54,7 @@
      $url_image_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->display_url;
      $descricao_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_media_to_caption->edges[0]->node->text;
      $likes_count= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$post_number]->node->edge_liked_by->count;
+     
      $post = array(
       "id"=>$post_number,
       "description" => $descricao_post,
@@ -85,15 +86,18 @@
 
   // LIMIT 12 posts -- Limitation of access to instagram, sorry
 function get_all_post_profile($cnt){
+  $z = 0;
  $post = array();
  $qtd_images = count($cnt->graphql->user->edge_owner_to_timeline_media->edges);
  for ($i=0; $i < $qtd_images; $i++) { 
   $url_image_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->display_url;
-  $descricao_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_media_to_caption->edges[0]->node->text;
+  //$descricao_post= $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_media_to_caption->edges[$z]->node->text;
+  $likes_post =  $cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_liked_by->count;
   $post_mature = array(
    "id"=>$i,
-   "description" => $descricao_post,
-   "image" =>  array()
+   //"description" => $descricao_post,
+   "image" =>  array(),
+   "likes" => $likes_post
  );
   array_push($post, $post_mature);
   if (isset($cnt->graphql->user->edge_owner_to_timeline_media->edges[$i]->node->edge_sidecar_to_children->edges)){
@@ -117,6 +121,13 @@ function get_all_post_profile($cnt){
 }
 }
 return $post;
+}
+
+//Get follows account
+function get_follows($cnt){
+  if($cnt->graphql->user->is_private!=1){}
+    $follows_profile = $cnt->graphql->user->edge_followed_by->count;
+  return $follows_profile;
 }
 
 
